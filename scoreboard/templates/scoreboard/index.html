@@ -1,0 +1,20 @@
+<H1>Current Pushup Leaders</H1>
+<H2>{{top_participant.participant_name}} has a big peepee</H2>
+
+To add exercise, click on your name. Cheating is bad. 
+<br>
+pushups | situps | squats | pullups | dips
+<br>
+
+{% if latest_scores_list %}
+    <ol>
+    {% for participant in latest_scores_list %}
+        <li><a href="{{participant.participant_name }}/detail">{{ participant.participant_name }} - {{ participant.score}} | {{ participant.situps_count}} | {{ participant.squats_count}} | {{participant.pullups_count}} | {{participant.dips_count}} </a></li>
+    {% endfor %}
+    </ol>
+{% else %}
+    <p>No participants.</p>
+{% endif %}
+
+Calculation for score is as follows:
+total_score=(pushups*.45)+(situps*.3)+(squats*.25) + (pullups*.45) + (dips*.45)

@@ -1,0 +1,44 @@
+<H1>{{participant.participant_name}}</H1>
+
+Current pushups: <b>{{participant.score}}</b>
+Current situps: <b>{{participant.situps_count}}</b>
+Current squats: <b>{{participant.squats_count}}</b>
+
+<H2>Log exercise below</H2>
+
+
+<form action="log_pushups" method="post">
+{% csrf_token %} 
+<label for="quantity"></label>
+<input type="number" id="quantity" name="quantity"> 
+<input type="submit" value= "add pushups">
+</form> 
+
+<form action="log_situps" method="post">
+{% csrf_token %} 
+<label for="quantity"></label>
+<input type="number" id="quantity" name="quantity"> 
+<input type="submit" value= "add situps">
+</form> 
+
+
+<form action="log_squats" method="post">
+{% csrf_token %} 
+<label for="quantity"></label>
+<input type="number" id="quantity" name="quantity"> 
+<input type="submit" value= "add squats">
+</form> 
+
+<form action="log_pullups" method="post">
+{% csrf_token %} 
+<label for="quantity"></label>
+<input type="number" id="quantity" name="quantity"> 
+<input type="submit" value= "add pullups">
+</form> 
+
+<form action="log_dips" method="post">
+{% csrf_token %} 
+<label for="quantity"></label>
+<input type="number" id="quantity" name="quantity"> 
+<input type="submit" value= "add dips">
+</form> 
