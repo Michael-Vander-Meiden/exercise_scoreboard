@@ -12,13 +12,13 @@ pushups | situps | squats | pullups | dips | <b>total score</b>
     {% for participant in latest_scores_list %}
         <tr>
     		<td>
-    		<a href="{{participant.participant_name }}/detail">{{ participant.participant_name }} -</a> </td>
-        	<td>{{ participant.score}} | </td>
-        	<td>{{ participant.situps_count}} | </td>
-        	<td>{{ participant.squats_count}} | </td>
-        	<td>{{participant.pullups_count}} | </td>
-        	<td>{{participant.dips_count}} | </td>
-        	<td><b>    {{participant.total_score}}</b></td></tr>
+    		<a href="{{participant.participant_name }}/detail">{{ participant.participant_name }} - </a> </td>
+        	<td>| {{ participant.score}} </td>
+        	<td>| {{ participant.situps_count}} </td>
+        	<td>| {{ participant.squats_count}} </td>
+        	<td>| {{participant.pullups_count}} </td>
+        	<td>| {{participant.dips_count}} </td>
+        	<td><b>|     {{participant.total_score}}</b></td></tr>
     {% endfor %}
     	</tbody>
     <table>
