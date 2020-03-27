@@ -7,11 +7,20 @@ pushups | situps | squats | pullups | dips
 <br>
 
 {% if latest_scores_list %}
-    <ol>
+    <table>
+    	<tbody>
     {% for participant in latest_scores_list %}
-        <li><a href="{{participant.participant_name }}/detail">{{ participant.participant_name }} - {{ participant.score}} | {{ participant.situps_count}} | {{ participant.squats_count}} | {{participant.pullups_count}} | {{participant.dips_count}} </a></li>
+        <tr>
+    		<td>
+    		<a href="{{participant.participant_name }}/detail">{{ participant.participant_name }} -</a> </td>
+        	<td>{{ participant.score}} | </td>
+        	<td>{{ participant.situps_count}} | </td>
+        	<td>{{ participant.squats_count}} | </td>
+        	<td>{{participant.pullups_count}} | </td>
+        	<td>{{participant.dips_count}} </a></td></tr>
     {% endfor %}
-    </ol>
+    	</tbody>
+    <table>
 {% else %}
     <p>No participants.</p>
 {% endif %}
