@@ -85,6 +85,19 @@ if 'RDS_DB_NAME' in os.environ:
             'PORT': os.environ['RDS_PORT'],
         }
     }
+
+elif 'PROD' in os.environ and os.environ['PROD']=="True":
+     DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql_psycopg2',
+            'NAME': 'ebdb',
+            'USER': 'michael',
+            'PASSWORD': 'password',
+            'HOST': 'aa5kcefm8vrr12.cftxjqescrck.us-west-2.rds.amazonaws.com',
+            'PORT': '5432',
+        }
+    }   
+
 else:
     DATABASES = {
         'default': {
