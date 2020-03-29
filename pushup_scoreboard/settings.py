@@ -97,12 +97,17 @@ elif 'PROD' in os.environ and os.environ['PROD']=="True":
             'PORT': '5432',
         }
     }   
-
+#remote version is 11.5
+#copying to local - drop db then follow these commands https://tableplus.com/blog/2018/04/postgresql-how-to-copy-database-to-other-server.html
 else:
     DATABASES = {
         'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+            'ENGINE': 'django.db.backends.postgresql_psycopg2',
+            'NAME': 'ebdb',
+            'USER': 'postgres',
+            'PASSWORD': 'password',
+            'HOST': 'localhost',
+            'PORT': '5432',
         }
     }
 
