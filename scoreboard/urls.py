@@ -5,6 +5,7 @@ from . import views
 app_name = 'scoreboard'
 urlpatterns = [
     path('', views.index, name='index'),
+    path('<str:competition_name>/', views.competition, name='competition'),
     path('<str:participant_name>/detail', views.detail, name='detail'),
     path('<str:participant_name>/log_pushups', views.log_pushups, name='log_pushups'),
     path('<str:participant_name>/log_situps', views.log_situps, name='log_situps'),

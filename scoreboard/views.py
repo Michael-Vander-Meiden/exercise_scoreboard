@@ -2,7 +2,7 @@ from django.shortcuts import render, get_object_or_404
 from django.template import  loader
 from django.urls import reverse
 from django.http import HttpResponse, HttpResponseRedirect
-from .models import Participant
+from .models import Participant, Competition
 
 def index(request):
     latest_scores_list = Participant.objects.order_by('-total_score')
@@ -10,6 +10,12 @@ def index(request):
     			'top_participant': latest_scores_list[0]}
     return render(request, 'scoreboard/index.html', context)
 
+def competition(request, competition_name):
+    competition = get_object_or_404(Competition, competition_name=competition_name)
+    latest_scores_list = competition.participant_set.all().order_by('-total_score')
+    context = {'latest_scores_list': latest_scores_list,
+    			'top_participant': latest_scores_list[0]}
+    return render(request, 'scoreboard/index.html', context)
 
 def detail(request, participant_name):
 	participant = get_object_or_404(Participant, participant_name=participant_name)
