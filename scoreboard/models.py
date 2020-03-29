@@ -1,7 +1,16 @@
 from django.db import models
 
 # Create your models here.
+
+class Competition(models.Model):
+	competition_name = models.CharField(max_length=200)
+
+
+
+
+
 class Participant(models.Model):
+	competition = models.ForeignKey(Competition, on_delete=models.CASCADE, null=True, blank=True)
 	participant_name = models.CharField(max_length=200)
 
 	#score is actually pushups
