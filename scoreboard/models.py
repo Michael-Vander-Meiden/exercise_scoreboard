@@ -6,9 +6,6 @@ class Competition(models.Model):
 	competition_name = models.CharField(max_length=200)
 
 
-
-
-
 class Participant(models.Model):
 	competition = models.ForeignKey(Competition, on_delete=models.CASCADE, null=True, blank=True)
 	participant_name = models.CharField(max_length=200)
@@ -31,3 +28,27 @@ class Participant(models.Model):
 						   (self.squats_count*.25) + (self.pullups_count*.45) +
 						   (self.dips_count*.45))
 		super(Participant, self).save(*args, **kwargs) #this is the real save
+
+# Exercise class defines the characteristics of an exercise for use in competitions
+class Exercise(models.Model):
+	#Name of the exercise
+	exercise_name = CharField(max_length=200)
+
+	#The name of the units value (miles, pushups, seconds, "")
+	units = models.CharField(max_length=100)
+
+	#True if time will be used
+	is_time = models.BooleanField(default=False)
+
+class CompetitionExercise(models.Model):
+	exercise = models.ForeignKey(Exercise)
+	competition = models.ForeignKey(Competition)
+
+class ExerciseVector(models.Model):
+	delta = models.IntegerField(default=0)
+
+	created_on = models.DateTimeField(auto_now_add=True)
+
+	player = models.ForeignKey(Participant)
+
+	competition_exercise = models.ForeignKey(CompetitionExercise)
