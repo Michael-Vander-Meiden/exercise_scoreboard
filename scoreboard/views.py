@@ -22,6 +22,17 @@ def detail(request, competition_name, participant_name):
 	context = {'participant': participant}
 	return render(request, 'scoreboard/detail.html', context)
 
+def log_exercise(request, competition_name, participant_name, comp_exercise_id):
+	participant = get_object_or_404(Participant, participant_name=participant_name)
+	comp_exercise = get_object_or_404(CompetitionExercise, pk=comp_exercise_id)
+	#TODO change index variable to delta
+	delta = int(request.POST['quantity'])
+	
+	# create exercise vector TODO: add stuff
+	exercise_vec = ExerciseVector.objects.create(delta=delta, participant=participant, competition_exercise=comp_exercise)
+
+	context = {'participant': participant}
+	return HttpResponseRedirect(reverse('scoreboard:competition', args=[competition_name]))
 
 def log_pushups(request, competition_name, participant_name):
 	participant = get_object_or_404(Participant, participant_name=participant_name)

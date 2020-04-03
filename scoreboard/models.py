@@ -32,7 +32,7 @@ class Participant(models.Model):
 # Exercise class defines the characteristics of an exercise for use in competitions
 class Exercise(models.Model):
 	#Name of the exercise
-	exercise_name = CharField(max_length=200)
+	exercise_name = models.CharField(max_length=200)
 
 	#The name of the units value (miles, pushups, seconds, "")
 	units = models.CharField(max_length=100)
@@ -40,15 +40,18 @@ class Exercise(models.Model):
 	#True if time will be used
 	is_time = models.BooleanField(default=False)
 
+#This class is made to be intantiated to link exercise models to each competition
 class CompetitionExercise(models.Model):
-	exercise = models.ForeignKey(Exercise)
-	competition = models.ForeignKey(Competition)
+	exercise = models.ForeignKey(Exercise, on_delete=models.CASCADE)
+	competition = models.ForeignKey(Competition, on_delete=models.CASCADE)
 
+# This class records changes in a participants count for a specific exercise
 class ExerciseVector(models.Model):
+	#The actual change
 	delta = models.IntegerField(default=0)
 
 	created_on = models.DateTimeField(auto_now_add=True)
 
-	player = models.ForeignKey(Participant)
+	participant = models.ForeignKey(Participant, on_delete=models.CASCADE)
 
-	competition_exercise = models.ForeignKey(CompetitionExercise)
+	competition_exercise = models.ForeignKey(CompetitionExercise, on_delete=models.CASCADE)
