@@ -2,7 +2,7 @@ from django.shortcuts import render, get_object_or_404
 from django.template import  loader
 from django.urls import reverse
 from django.http import HttpResponse, HttpResponseRedirect
-from .models import Participant, Competition
+from .models import Participant, Competition, CompetitionExercise, Exercise, ExerciseVector
 
 def index(request):
     latest_scores_list = Participant.objects.order_by('-total_score')

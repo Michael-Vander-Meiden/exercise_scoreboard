@@ -7,6 +7,14 @@ Current pullups: <b>{{participant.pullups_count}}</b>
 Current dips: <b>{{participant.dips_count}}</b>
 <H2>Log exercise below</H2>
 
+test for new endpoint
+<form action="log_exercise/1" method="post">
+{% csrf_token %} 
+<label for="quantity"></label>
+<input type="number" id="quantity" name="quantity"> 
+<input type="submit" value= "add exercise">
+</form>
+
 
 <form action="log_pushups" method="post">
 {% csrf_token %} 
