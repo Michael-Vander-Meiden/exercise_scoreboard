@@ -1,10 +1,37 @@
-<H1>Current Pushup Leaders</H1>
+{% load scoreboard_extras %}
+<H1>{{competition_name}} scoreboard</H1>
 <H2>{{top_participant.participant_name}} has a great smile</H2>
 
 To add exercise, click on your name. Cheating is bad. 
 <br>
-pushups | situps | squats | pullups | dips | <b>total score</b>
 <br>
+<table>
+	<th> 
+		{% for comp_ex in competition_exercise_list %}
+		 <td>| {{comp_ex.name}} </td>
+		{% endfor %}
+ 
+ 		<td><b>| total score</b></td>
+	</th>
+	<tbody>
+{% for participant in participant_data %}
+    <tr>
+		<td>
+		<a href="{{participant.name }}/detail">{{ participant.name }} </a> </td>
+    	{% for comp_ex in competition_exercise_list %}
+    	
+    	<td>| {{participant|keyvalue:comp_ex.name}}</td>
+    	{% endfor %}
+    	<td><b>| {{participant.total_score}}</b></td>
+    </tr>
+{% endfor %}
+	</tbody>
+<table>
+
+
+
+<br>
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 {% if latest_scores_list %}
     <table>
@@ -26,5 +53,9 @@ pushups | situps | squats | pullups | dips | <b>total score</b>
     <p>No participants.</p>
 {% endif %}
 
-Calculation for score is as follows:
-total_score=(pushups*.45)+(situps*.3)+(squats*.25) + (pullups*.45) + (dips*.45)
+<br>
+Weights for each exercise are as follows:
+{% for comp_ex in competition_exercise_list %}
+	<br>
+	{{comp_ex.name}}: {{comp_ex.weight}}
+{% endfor %}

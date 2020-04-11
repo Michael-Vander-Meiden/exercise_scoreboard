@@ -14,16 +14,54 @@ def index(request):
     return render(request, 'scoreboard/index.html', context)
 
 def competition(request, competition_name, ):
+    #get data to load main competition page
     competition = get_object_or_404(Competition, competition_name=competition_name)
-    latest_participant_list = competition.participant_set.all().order_by('-total_score')
-    
-    context = {'latest_scores_list': latest_scores_list,
-                'top_participant': latest_scores_list[0]}
+    latest_participant_list = competition.participant_set.all()
+    competition_exercise_list = competition.competitionexercise_set.all()
+    participant_data = get_competition_data(latest_participant_list, competition_exercise_list)
+
+    context = {'latest_scores_list': latest_participant_list,
+                'top_participant': latest_participant_list[0],
+                'competition_exercise_list': competition_exercise_list,
+                'participant_data': participant_data,
+                'competition_name': competition_name}
     return render(request, 'scoreboard/index.html', context)
 
-def get_competition_data(participant_list):
+def get_competition_data(participant_list, competition_exercise_list):
     #TODO fill this out for the stuff you want on the front page
+    #each participant's total score for each exercise
     competition_dump = []
+
+    for participant in participant_list:
+        participant_dict = {}
+        participant_name = participant.participant_name
+        participant_dict['name'] = participant_name
+        scores_dict = get_compex_scores_for_participant(participant, competition_exercise_list)
+        participant_dict.update(scores_dict)
+        competition_dump.append(participant_dict)
+    return competition_dump
+
+def get_compex_scores_for_participant(participant, competition_exercise_list):
+    scores_dict = {} 
+    total_score = 0
+    for i, comp_ex in enumerate(competition_exercise_list):
+        #name
+        exercise_name = comp_ex.exercise.exercise_name
+        #score
+        cur_participant_total = ExerciseVector.objects.filter(competition_exercise=comp_ex).filter(participant=participant).aggregate(Sum('delta'))['delta__sum']
+        #TODO add total weighted score
+        scores_dict[exercise_name] = cur_participant_total
+        #add this exercise to total score
+        total_score += comp_ex.weight * cur_participant_total
+
+        scores_dict["total_score"] = total_score 
+    return scores_dict
+
+
+        #TODO last week score 
+
+
+
 
 
 

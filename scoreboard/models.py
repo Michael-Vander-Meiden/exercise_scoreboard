@@ -45,8 +45,16 @@ class Exercise(models.Model):
 
 #This class is made to be intantiated to link exercise models to each competition
 class CompetitionExercise(models.Model):
+	#TODO override save with exercise name feature
 	exercise = models.ForeignKey(Exercise, on_delete=models.CASCADE)
 	competition = models.ForeignKey(Competition, on_delete=models.CASCADE)
+	name = models.CharField(max_length=200, default="")
+	weight = models.FloatField(default=1)
+
+	def save(self, *args, **kwargs):
+		self.name = self.exercise.exercise_name
+		super(CompetitionExercise, self).save(*args, **kwargs) #this is the real save
+
 
 # This class records changes in a participants count for a specific exercise
 class ExerciseVector(models.Model):
