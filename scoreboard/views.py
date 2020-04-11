@@ -21,7 +21,7 @@ def competition(request, competition_name, ):
     participant_data = get_competition_data(latest_participant_list, competition_exercise_list)
 
     context = {'latest_scores_list': latest_participant_list,
-                'top_participant': latest_participant_list[0],
+                'top_participant_name': participant_data[0]['name'],
                 'competition_exercise_list': competition_exercise_list,
                 'participant_data': participant_data,
                 'competition_name': competition_name}
@@ -39,6 +39,10 @@ def get_competition_data(participant_list, competition_exercise_list):
         scores_dict = get_compex_scores_for_participant(participant, competition_exercise_list)
         participant_dict.update(scores_dict)
         competition_dump.append(participant_dict)
+
+    #TODO sort by total score, descending order
+    competition_dump.sort(key=lambda item:item['total_score'], reverse=True)
+
     return competition_dump
 
 def get_compex_scores_for_participant(participant, competition_exercise_list):
@@ -49,7 +53,10 @@ def get_compex_scores_for_participant(participant, competition_exercise_list):
         exercise_name = comp_ex.exercise.exercise_name
         #score
         cur_participant_total = ExerciseVector.objects.filter(competition_exercise=comp_ex).filter(participant=participant).aggregate(Sum('delta'))['delta__sum']
-        #TODO add total weighted score
+
+        if not cur_participant_total:
+            cur_participant_total=0
+
         scores_dict[exercise_name] = cur_participant_total
         #add this exercise to total score
         total_score += comp_ex.weight * cur_participant_total

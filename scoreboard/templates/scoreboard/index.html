@@ -1,10 +1,8 @@
 {% load scoreboard_extras %}
 <H1>{{competition_name}} scoreboard</H1>
-<H2>{{top_participant.participant_name}} has a great smile</H2>
+<H2>{{top_participant_name}} has a great smile</H2>
 
-To add exercise, click on your name. Cheating is bad. 
-<br>
-<br>
+<H3>All Time:</H3>
 <table>
 	<th> 
 		{% for comp_ex in competition_exercise_list %}
@@ -31,30 +29,7 @@ To add exercise, click on your name. Cheating is bad.
 
 
 <br>
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-{% if latest_scores_list %}
-    <table>
-    	<tbody>
-    {% for participant in latest_scores_list %}
-        <tr>
-    		<td>
-    		<a href="{{participant.participant_name }}/detail">{{ participant.participant_name }} - </a> </td>
-        	<td>| {{ participant.score}} </td>
-        	<td>| {{ participant.situps_count}} </td>
-        	<td>| {{ participant.squats_count}} </td>
-        	<td>| {{participant.pullups_count}} </td>
-        	<td>| {{participant.dips_count}} </td>
-        	<td><b>|     {{participant.total_score}}</b></td></tr>
-    {% endfor %}
-    	</tbody>
-    <table>
-{% else %}
-    <p>No participants.</p>
-{% endif %}
-
-<br>
-Weights for each exercise are as follows:
+Weights for each exercise:
 {% for comp_ex in competition_exercise_list %}
 	<br>
 	{{comp_ex.name}}: {{comp_ex.weight}}
