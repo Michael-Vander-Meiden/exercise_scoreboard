@@ -61,7 +61,7 @@ def get_compex_scores_for_participant(participant, competition_exercise_list):
         #add this exercise to total score
         total_score += comp_ex.weight * cur_participant_total
 
-        scores_dict["total_score"] = total_score 
+    scores_dict["total_score"] = int(total_score)
     return scores_dict
 
 
