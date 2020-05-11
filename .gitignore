@@ -6,3 +6,8 @@
 ./pushup_scoreboard/__pycache*
 ./scoreboard/__pycache*
 .ipynb_checkpoints
+
+# Elastic Beanstalk Files
+.elasticbeanstalk/*
+!.elasticbeanstalk/*.cfg.yml
+!.elasticbeanstalk/*.global.yml
