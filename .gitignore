@@ -7,6 +7,7 @@
 
 #other stuff
 *.pyc
+*.sql
 *cpython-36.pyc
 ./pushup_scoreboard/__pycache*
 ./scoreboard/__pycache*
