@@ -1,6 +1,37 @@
 {% load scoreboard_extras %}
 <H1>{{competition_name}} scoreboard</H1>
 <H2>{{top_participant_name}} has a great smile</H2>
+<H2>{{top_weekly_participant_name}} is a good dancer</H2>
+
+
+
+<H3>Last Week:</H3>
+<table>
+	<th> 
+		{% for comp_ex in competition_exercise_list %}
+		 <td>| {{comp_ex.name}} </td>
+		{% endfor %}
+ 
+ 		<td><b>| total score</b></td>
+	</th>
+	<tbody>
+{% for participant in weekly_participant_data %}
+    <tr>
+		<td>
+		<a href="{{participant.name }}/detail">{{ participant.name }} </a> </td>
+    	{% for comp_ex in competition_exercise_list %}
+    	
+    	<td>| {{participant|keyvalue:comp_ex.name}}</td>
+    	{% endfor %}
+    	<td><b>| {{participant.total_score}}</b></td>
+    </tr>
+{% endfor %}
+	</tbody>
+<table>
+
+
+
+
 
 <H3>All Time:</H3>
 <table>

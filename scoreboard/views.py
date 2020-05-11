@@ -2,9 +2,13 @@ from django.db.models import Sum
 from django.shortcuts import render, get_object_or_404
 from django.template import  loader
 from django.urls import reverse
+from django.utils import timezone
 from django.http import HttpResponse, HttpResponseRedirect
 from .models import Participant, Competition, CompetitionExercise, Exercise, ExerciseVector
 
+from datetime import timedelta
+
+import copy
 import json
 
 def index(request):
@@ -18,12 +22,14 @@ def competition(request, competition_name, ):
     competition = get_object_or_404(Competition, competition_name=competition_name)
     latest_participant_list = competition.participant_set.all()
     competition_exercise_list = competition.competitionexercise_set.all()
-    participant_data = get_competition_data(latest_participant_list, competition_exercise_list)
+    participant_data, weekly_participant_data = get_competition_data(latest_participant_list, competition_exercise_list)
 
     context = {'latest_scores_list': latest_participant_list,
                 'top_participant_name': participant_data[0]['name'],
+                'top_weekly_participant_name': weekly_participant_data[0]['name'],
                 'competition_exercise_list': competition_exercise_list,
                 'participant_data': participant_data,
+                'weekly_participant_data': weekly_participant_data,
                 'competition_name': competition_name}
     return render(request, 'scoreboard/index.html', context)
 
@@ -31,38 +37,62 @@ def get_competition_data(participant_list, competition_exercise_list):
     #TODO fill this out for the stuff you want on the front page
     #each participant's total score for each exercise
     competition_dump = []
+    weekly_competition_dump = []
 
     for participant in participant_list:
+        #create base info for dict
         participant_dict = {}
         participant_name = participant.participant_name
         participant_dict['name'] = participant_name
-        scores_dict = get_compex_scores_for_participant(participant, competition_exercise_list)
+        weekly_participant_dict = copy.deepcopy(participant_dict)
+
+        #get exercise info
+        scores_dict, weekly_scores_dict = get_compex_scores_for_participant(participant, competition_exercise_list)
+        
+        #add all-time exercise values and weekly values to respective dict
         participant_dict.update(scores_dict)
+        weekly_participant_dict.update(weekly_scores_dict)
+
+        #add to respective list
         competition_dump.append(participant_dict)
+        weekly_competition_dump.append(weekly_participant_dict)
 
     #TODO sort by total score, descending order
     competition_dump.sort(key=lambda item:item['total_score'], reverse=True)
+    weekly_competition_dump.sort(key=lambda item:item['total_score'], reverse=True)
 
-    return competition_dump
+    return competition_dump, weekly_competition_dump
 
 def get_compex_scores_for_participant(participant, competition_exercise_list):
-    scores_dict = {} 
+    scores_dict = {}
+    weekly_scores_dict = {}
     total_score = 0
+    weekly_total_score = 0
+
+
+
     for i, comp_ex in enumerate(competition_exercise_list):
         #name
         exercise_name = comp_ex.exercise.exercise_name
         #score
         cur_participant_total = ExerciseVector.objects.filter(competition_exercise=comp_ex).filter(participant=participant).aggregate(Sum('delta'))['delta__sum']
-
+        cur_weekly_participant_total = ExerciseVector.objects.filter(competition_exercise=comp_ex).filter(participant=participant
+                                                            ).filter(created_on__gte=(timezone.now() - timedelta(days=7))).aggregate(Sum('delta'))['delta__sum']
         if not cur_participant_total:
             cur_participant_total=0
+        if not cur_weekly_participant_total:
+            cur_weekly_participant_total=0
 
         scores_dict[exercise_name] = cur_participant_total
+        weekly_scores_dict[exercise_name] = cur_weekly_participant_total
         #add this exercise to total score
         total_score += comp_ex.weight * cur_participant_total
+        weekly_total_score += comp_ex.weight * cur_weekly_participant_total
+
 
     scores_dict["total_score"] = int(total_score)
-    return scores_dict
+    weekly_scores_dict["total_score"] = int(weekly_total_score)
+    return scores_dict, weekly_scores_dict
 
 
         #TODO last week score 
